@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NGO Website |signUp</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/main.css"media = "screen">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script type = "module" src = "./js/index.js" defer></script>
+</head>
+<body>
+    <div id="wrapper" class="container-fluid img-background wrapper--place-items">
+        <div class="overlay"></div>
+        <div class="container form_container">
+            <div class="row btn_row">
+                <div class="col-6 py-2 d-flex justify-content-center" id = "login-btn-div">
+                    <button type = "button" class="btn btn-md text-uppercase btn_toggle" value = "login">login</button>
+                </div>
+                <div class="col-6 py-2 d-flex justify-content-center bg-white" id = "signup-btn-div">
+                    <button type = "button" class="btn btn-md text-uppercase btn_toggle" value = "signup">sign up</button>
+                </div>
+            </div>
+            <div class="row form_row pos-relative">
+                <div class="col-lg-12 signup" id = "signup" >
+                    <form  method = "POST" id = "signup_form" class = "d-flex flex-column align-items-center py-md-4 pt-lg-5">
+                        <div class="form-group col-lg-11">
+                            <i class="fa fa-user text-primary"></i><input type="text" id="fullname" class="form-control  fullname text-capitalize" placeholder="fullname">
+                            <div class="invalid-feedback">
+                                <p class="error font-weight-bold">Fullname must contain alphabets and more than 3 characters</p>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-11 mt-md-2">
+                            <i class="fa fa-user text-primary"></i>
+                            <select id="role" class="form-select  text-capitalize">
+                                <option value="" disabled selected hidden>role</option>
+                                <option value="donators">donators</option>
+                                <option value="agency">agency</option>
+                                <option value="admin">admin</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-11 mt-md-2">
+                            <i class="fa fa-envelope text-primary"></i><input type="email" id="email" class="form-control  email" placeholder="Email">
+                            <div class="invalid-feedback">
+                                <p class="error font-weight-bold">Enter a valid email</p>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-11 mt-md-2">
+                            <i class="fa fa-lock text-primary"></i><input type="password" id="password" class="form-control  password" placeholder="Password">
+                            <div class="invalid-feedback">
+                                <p class="error font-weight-bold">Password must contain a special character, a number and must be at least 8 characters</p>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-11 mt-md-2">
+                            <i class="fa fa-lock text-primary"></i><input type="password" id="password_confirm" class="form-control  password_confirm" placeholder="Confirm password">
+                            <div class="invalid-feedback">
+                                <p class="error font-weight-bold">Password must contain a special character, a number and must be at least 8 characters</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-11 d-grid">
+                            <button type="submit" class="btn signup_btn btn-success mt-md-3 p-2 text-uppercase">create an account</button>
+                            <div class="login_statement d-flex mt-md-3 justify-content-center align-items-center">
+                                <p class="paragraph">I already a have an account?</p>
+                                <button type = "button" class = "btn btn-link text-capitalize btn_redirect" value = "login">login</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-12 login" id="login">
+                    <form target = "_blank" method = "post" id = "login_form" class = "d-flex flex-column align-items-center py-md-4 pt-lg-5">
+                        <h2 class="font-weight-bold text-uppercase text-center text-primary mb-lg-4 heading">welcome back</h2>
+                        <div class="form-group col-lg-11">
+                            <i class="fa fa-lock text-primary"></i><input type="email" id="login_email" class="form-control col-lg-4 "placeholder = "Email">
+                            <div class="invalid-feedback">
+                                <p class="error font-weight-bold">Enter a valid email</p>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-11">
+                            <i class="fa fa-lock text-primary"></i><input type="password" id="login_password" class="form-control col-lg-4 "placeholder = "Password">
+                            <div class="invalid-feedback">
+                                <p class="error font-weight-bold">Password must containat least one uppercase letter, one lowercase letter, one number and one special character and must be at not more than 10 characters</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-11 d-inline-flex justify-content-end">
+                            <a href="#"><button type = "button" class = "btn btn-link btn_forget py-lg-3">Forget password?</button></a>
+                        </div>
+                        <div class="col-lg-11">
+                            <button type="submit" class="btn login_btn btn-success mt-lg-3 p-2 text-uppercase">login</button>
+                        </div>
+                        <div class="login_statement d-flex mt-md-3 justify-content-center align-items-center">
+                            <p class="paragraph">Don't have an account?</p>
+                            <button type = "button" class = "btn btn-link text-capitalize btn_redirect" value = "signup">sign up</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/main.css"media = "screen">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/fontawesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js" integrity="sha512-g2TeAWw5GPnX7z0Kn8nFbYfeHcvAu/tx6d6mrLe/90mkCxO+RcptyYpksUz35EO337F83bZwcmUyHiHamspkfg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src = "./js/header.js" defer></script>
+    <script type = "module" src = "./js/dashboard.js" defer></script>
+    <title>NGO | Dashboard</title>
+</head>
+<body>
+    <div class = "grid--three-row" id = "wrapper">
+        <header id="header" class = "fixed-top">
+            <nav class="navbar navbar-expand-md navbar-dark">
+                <div class="container d-flex justify-content-between">
+                  <a href = "dashboard.html" class="navbar-brand logo" href="#"><img src= "image/logo3.svg" alt="logo image" class="img-fluid logo-img"></a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                      <ul class="navbar-nav ms-auto text-center main-navbar justify-content-md-end">
+                        <li class="nav-item dropdown view-link" disabled>
+                            <a class="nav-link dropdown-toggle text-capitalize text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              view
+                            </a>
+                            <div class="dropdown-menu mt-lg-3 p-lg-4" aria-labelledby="navbarDropdown">
+                              <a class="dropdown-item mb-md-4 text-capitalize view-post" href="viewPost.html"><i class="fa fa-eye" aria-hidden="true"></i> view post</a>
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item mt-md-4 text-capitalize view-user" href="viewUsers.html"><i class="fa fa-eye" aria-hidden="true"></i> view users</a>
+                          </li>
+                        <li class="nav-item active create-link">
+                          <a class="nav-link text-capitalize text-white" href="createPost.html">create post</a>
+                        </li>
+                        <li class="nav-item dropdown username-link">
+                            <a class="nav-link dropdown-toggle text-capitalize text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              username
+                            </a>
+                            <div class="dropdown-menu mt-lg-3 p-lg-4" aria-labelledby="navbarDropdown">
+                              <a class="dropdown-item text-capitalize mb-md-4" href="profileEdit.html"><i class="fas fa-edit"></i> edit account</a>
+                              <div class="dropdown-divider"></div>
+                              <a class="dropdown-item text-capitalize mt-md-4 logout-btn"><i class = "fas fa-sign-out" aria-hidden="true"></i> logout</a>
+                          </li>
+                      </ul>
+                    </div>
+                </div>
+              </nav>
+        </header>
+        <main id ="main-container">
+            <div class="container mt-lg-5 pb-lg-4">
+                <div class="row pb-md-4">
+                    <div class="post-filter-div ms-auto col-lg-4 d-flex gap-4 mt-lg-3">
+                      <p class="text-capitalize filter-text">
+                          filter by:
+                      </p>
+                      <select id="post-filter" class="form-select text-capitalize rounded-0 post-card-filter">
+                          <option value="" disabled selected hidden>post type</option>
+                          <option value="money">money donation</option>
+                          <option value="blood">blood donation</option>
+                          <option value="material">material donation</option>
+                      </select>
+                  </div>
+                  </div>
+                    <div class="col-lg-12 col-md-12 main-col d-flex flex-wrap justify-content-center">
+                    </div>
+                </div>
+                <template data-post-card>
+                    <a class="post-card-redirect">
+                      <div class="card post-card" id = "card-redirect">
+                        <img alt="Post image" class="card-img-top img-fluid card-img border-bottom border-success" data-post-img>
+                        <div class="card-body">
+                          <div class="d-flex flex-column card-descr">
+                            <h5 class="card-title text-capitalize post-title" data-post-title></h5>
+                            <p class="post-type ms-auto text-success" data-post-type></p>
+                          </div>
+                          <hr class="post-divider">
+                          <p class="card-text post-text" data-post-descr></p>
+                        </div>
+                        <p class = "div--deactive" data-post-index></p>
+                      </div>
+                    </a>
+                </template>
+                
+            </div>
+        </main>
+        <footer id="footer" class = "d-flex align-items-center justify-content-center">
+            <h4 class="copy text-uppercase text-white">copyright &copy; 2023</h4>
+        </footer>
+    </div>
+</body>
+</html>
