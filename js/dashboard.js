@@ -59,6 +59,7 @@ function createPostUI(post){
     postId.textContent = post._id;
 
     let imgURL = post.postImage;
+    console.log(imgURL);
     fetch(imgURL, {
         method: "GET"
     })
