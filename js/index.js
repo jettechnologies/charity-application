@@ -250,18 +250,40 @@ function loginFormValidator(e){
         };
         // this.submit();
         // mainfunctions.redirect(e, location);
-        easyHttp.post("https://charity-app.up.railway.app/api/auth/login", header, data)
+
+        
+
+        // setting a timeout for removing the innerHTML content
+            easyHttp.post("https://charity-app.up.railway.app/api/auth/login", header, data)
             .then(data => {
                     console.log(data.token);
                     let token = data.token;
                     if(localStorage.getItem("token") !== ""){
                         localStorage.removeItem("token");
                     }
-                    localStorage.setItem("token", token);
-                    mainfunctions.redirect("dashboard.html");
+                    
+                    // adding a spinner class to the login btn
+                    const loginBtn = document.querySelector(".login_btn");
+                    loginBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Login...`;
+                    setTimeout(() =>{
+                        localStorage.setItem("token", token);
+                        loginBtn.innerHTML = "login";
+                        mainfunctions.redirect("dashboard.html");
+                    }, 1000);
             })
             .catch(error =>{
                 console.log(error);
+
+                // displaying error messages
+                const regex = /invalid!$/i,
+                    errorMsg = error.message,
+                    loginHeading = document.querySelector(".heading");
+                
+                    let msg = errorMsg.split(":");
+                    msg = msg[0].trimStart();
+                    
+                    loginHeading.insertAdjacentHTML("afterend", `<div class="p-md-3 mb-md-3 bg-danger col-lg-11"><p class="error text-white mb-lg-2">${msg}</p></div>`);
             });
 
         // loginEmail.value = "";

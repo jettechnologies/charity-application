@@ -32,7 +32,6 @@ document.addEventListener("DOMContentLoaded", () =>{
                 cardArr = postDetails.map(postDetail => {
                     let contentType = postDetail.content.split("+");
                     contentType = contentType[0];
-                    console.log(postDetail);
                     // calling the function to create the UI
                     const cardRow = createPostUI(postDetail);
                     return({type: contentType, element: cardRow});
@@ -59,7 +58,6 @@ function createPostUI(post){
     postId.textContent = post._id;
 
     let imgURL = post.postImage;
-    console.log(imgURL);
     fetch(imgURL, {
         method: "GET"
     })

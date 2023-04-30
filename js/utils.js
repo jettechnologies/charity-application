@@ -4,7 +4,7 @@ export function displayMessage(msg, msgType ){
     const paragraph = document.createElement("p");
     const message = document.createTextNode(msg);
 
-    msgDiv.className = `p-md-3 mb-md-3 bg-${msgType} col-lg-12`;
+    msgDiv.className = `p-md-3 mb-md-3 bg-${msgType} col-lg-11`;
     paragraph.className = `error text-white mb-lg-2`;
     paragraph.appendChild(message);
     msgDiv.appendChild(paragraph);
@@ -102,6 +102,37 @@ function inputValidity(e){
                 inputName.classList.remove("is-invalid");
             }
         break;  
+    }
+}
+
+// function for validating the file
+export function validateFile(uploadImg){
+    let filePath = uploadImg.value,
+        fileExtension = filePath.split(".").pop(),
+        fileSize = uploadImg.files[0].size,
+        sizeInMb = (fileSize/1048576).toFixed(2);
+
+    // Allowing file type
+    var allowedExtensions = /(\jpg|\jpeg|\png)$/i;
+             
+    if (!allowedExtensions.test(fileExtension)){
+        uploadImg.classList.add("is-invalid");
+        const errorParagraph = uploadImg.nextElementSibling.firstElementChild;
+        errorParagraph.textContent = "File extension must be jpg | jpeg | png | gif";
+
+        filePath = '';
+        return true;
+    }
+    else if(sizeInMb > 2){
+        uploadImg.classList.add("is-invalid");
+        const errorParagraph = uploadImg.nextElementSibling.firstElementChild;
+        errorParagraph.textContent = "File size must not be greater than 2MB";
+
+        filePath = '';
+        return true;
+    }
+    else{
+        uploadImg.classList.remove("is-invalid");
     }
 }
 

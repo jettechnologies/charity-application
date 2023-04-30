@@ -21,32 +21,37 @@ document.addEventListener("DOMContentLoaded", () =>{
               userInfo = decodeToken.user,
               userRole = userInfo.role;
 
-        // if(localStorage.getItem("postId") !== ""){
-        //     const postId = localStorage.getItem("postId"),
-        //           url = `https://charity-app.up.railway.app/api/posts/${postId}`,
-        //           header = {
-        //                     "Authorization" : `Bearer ${token}`
-        //                 }
-        //         getPostInfo(url, header)
-        //         .then(data => console.log(data));
+        if(localStorage.getItem("postId") !== ""){
+            const postId = localStorage.getItem("postId"),
+                  url = `https://charity-app.up.railway.app/api/posts/${postId}`,
+                  header = {
+                            "Authorization" : `Bearer ${token}`
+                        }
+                getPostInfo(url, header)
+                .then(data => console.log(data));
             
-        //         async function getPostInfo(url, header){
-        //             try{
-        //                 const response = await fetch(url, {
-        //                     method : "GET",
-        //                     headers : header
-        //                 });
-        //                 const resData = await response.json();
-        //                 return resData;
-        //             }
-        //             catch(error){
-        //                 console.log(error);
-        //             }
-        //         }
-            
-        //         console.log(postId, url);
+                async function getPostInfo(url, header){
+                    try{
+                        const response = await fetch(url, {
+                            method : "GET",
+                            headers : header
+                        });
+                        const resData = await response.json();
+                        return resData;
+                    }
+                    catch(error){
+                        console.log(error);
+                    }
+                }   
 
-        // }
+                if(userRole !== "donators"){
+                    const ctaBox = document.querySelector(".cta-box"); 
+                    ctaBox.classList.add("div--deactive");   
+                }
+            
+                console.log(postId, url);
+
+        }
 
         if(userRole !== "agency"){
             const updatePostBtn = document.querySelector(".update-post-btn");
@@ -81,7 +86,9 @@ UIpaymentBtns.forEach(paymentBtn =>{
     paymentBtn.addEventListener("click", showHiddenField);
 });
 UIfileInputs.forEach(fileInput =>{
-    fileInput.addEventListener("change", validateFile);
+    fileInput.addEventListener("change", (e) =>{
+        mainfunctions.validateFile(e.target);
+    });
 });
 UIbankName.addEventListener("change", updateAccNumber);
 bloodGenotype.addEventListener("change", dsaGenotypeMSg);
@@ -447,36 +454,36 @@ function showHiddenField(e){
         transferField.classList.remove("hidden-field");
     }
 }
-// function for validating the file
-function validateFile(e){
-    let filePath = e.target.value,
-        fileExtension = filePath.split(".").pop(),
-        fileSize = e.target.files[0].size,
-        sizeInMb = (fileSize/1048576).toFixed(2);
+// // function for validating the file
+// function validateFile(e){
+//     let filePath = e.target.value,
+//         fileExtension = filePath.split(".").pop(),
+//         fileSize = e.target.files[0].size,
+//         sizeInMb = (fileSize/1048576).toFixed(2);
 
-    // Allowing file type
-    var allowedExtensions = /(\jpg|\jpeg|\png)$/i;
+//     // Allowing file type
+//     var allowedExtensions = /(\jpg|\jpeg|\png)$/i;
              
-    if (!allowedExtensions.test(fileExtension)){
-        e.target.classList.add("is-invalid");
-        const errorParagraph = document.querySelector(".error");
-        errorParagraph.textContent = "File extension must be jpg | jpeg | png | gif";
+//     if (!allowedExtensions.test(fileExtension)){
+//         e.target.classList.add("is-invalid");
+//         const errorParagraph = document.querySelector(".error");
+//         errorParagraph.textContent = "File extension must be jpg | jpeg | png | gif";
 
-        console.log(errorParagraph);
-        filePath = '';
-    }
-    else if(sizeInMb > 2){
-        e.target.classList.add("is-invalid");
-        const errorParagraph = document.querySelector(".error");
-        errorParagraph.textContent = "File size must not be greater than 2MB";
+//         console.log(errorParagraph);
+//         filePath = '';
+//     }
+//     else if(sizeInMb > 2){
+//         e.target.classList.add("is-invalid");
+//         const errorParagraph = document.querySelector(".error");
+//         errorParagraph.textContent = "File size must not be greater than 2MB";
 
-        filePath = '';
-    }
-    else{
-        e.target.classList.remove("is-invalid");
-    }
-    // console.log(sizeInMb, fileName);
-}
+//         filePath = '';
+//     }
+//     else{
+//         e.target.classList.remove("is-invalid");
+//     }
+//     // console.log(sizeInMb, fileName);
+// }
 // update account number
 function updateAccNumber(e){
     const bankNumberField = document.getElementById("bank-number");
@@ -589,23 +596,88 @@ function materialDonation(e){
     const materialType = document.getElementById("material-type"),
           materialName = document.getElementById("material-name"),
           materialQuantity = document.getElementById("material-quantity"),
-          regex = /^[a-zA-Z\s]{3,10}$/i,
-          inputArr = [materialName, materialQuantity, materialType];
+          materialImg = document.getElementById("material-img"),
+          regex = /^[a-zA-Z][a-zA-Z ]+[a-zA-Z]{3,10}$/i,
+          inputArr = [materialName, materialQuantity, materialType],
+          description = `Type of material : ${materialType.value} + 
+          Name of the donation : ${materialName.value} +
+          Quantity of the donation made : ${materialQuantity.value}`;
 
     // validating empty input field
     mainfunctions.fieldInputValidation(inputArr, this);
 
-    if(!regex.test(materialName.value)){
-        materialName.classList.add("is-invalid");
+    if(materialImg.value !== ""){
+        if(!regex.test(materialName.value)){    
+            materialName.classList.add("is-invalid");
+        }
+        else{
+            if(localStorage.getItem("token") !== ""){
+                const token = localStorage.getItem("token");
+
+                if(localStorage.getItem("postId") !== ""){
+                    const postID = localStorage.getItem("postId");
+
+                    let url, data, header, formData;
+
+                    // making an api call for the donation of relief materials
+                    data = {
+                        description: description,
+                        image : `${materialImg.files[0].name}`
+                    };
+                    header = {
+                        "Accept": "application/json",
+                        'Authorization': `Bearer ${token}`,
+                        'Content-type': 'application/json'
+                    };
+                    url = `https://charity-app.up.railway.app/api/relief/donate/${postID}`;
+
+                    easyHttp.post(url, header, data)
+                    .then(data =>{
+                        console.log(data);
+                        const materialID  = data._id;
+                        console.log(materialID);
+
+                        // making a patch for the material image upload
+                        formData = new FormData();
+                        formData.append("file", materialImg.files[0]);
+
+                        const imgData = {
+                            formData : formData,
+                            msg : "Picture of the material uploaded succesfully"
+                        }
+                        header = {
+                            'Authorization': `Bearer ${token}`,
+                        };
+                        url = `https://charity-app.up.railway.app/api/money/upload/${materialID}`;
+
+                        easyHttp.imgUpload(url, header, imgData)
+                        .then(data => {
+                            console.log(data);
+
+                            materialName.value = "";
+                            materialQuantity.value = "";
+                            materialType.value = "";
+                            $('#material-donation').modal("hide");
+                            showCongratMsg();
+                        });
+                    })
+                    .catch(error => console.log(error));
+        
+                }
+            }
+            
+        }
     }
     else{
-        materialName.classList.remove("is-invalid");
-        $('#material-donation').modal("hide");
-        materialName.value = "";
-        materialQuantity.value = "";
-        materialType.value = "";
-        showCongratMsg();
+        let msg = "Please select an image of the material donation";
+            const error = mainfunctions.displayMessage(msg, "danger");
+            this.insertBefore(error, this.firstChild);
+            setTimeout(() => {
+                this.removeChild(error);
+            }, 2000);
     }
+    
+
 }
 
 // empty field validation

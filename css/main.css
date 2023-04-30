@@ -300,6 +300,7 @@ input[type = number] {
 }
 .main-navbar .nav-item a{
     font-size:var(--font-size-500);
+    cursor:pointer;
 }
 .main-navbar .nav-item:not(:last-child){
     margin-right:var(--padding-1000);

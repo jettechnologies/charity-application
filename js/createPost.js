@@ -60,12 +60,18 @@ function createPost(e) {
                 // calling post img upload function
                 postImgUpload(patchUrl, header, formData)
                 .then(data => {
-                    const msgDiv = mainfunctions.displayMessage(data, "success");
+                    const msgDiv = mainfunctions.displayMessage(data, "success"),
+                          postBtn = document.getElementById("post-btn");
                     UIcreatePostForm.insertBefore(msgDiv, UIcreatePostForm.firstChild);
+                    postBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    creating post...`;
+                    setTimeout(() =>{
                         setTimeout(() => {
+                            postBtn.innerHTML = "Create Post";
                             UIcreatePostForm.removeChild(msgDiv);
                             mainfunctions.redirect("dashboard.html");
-                        }, 2000);
+                        }, 1000);
+                    }, 2000);
                 })
                 .catch(error =>console.log(error));
 
@@ -87,46 +93,11 @@ function createPost(e) {
 
             let msg = "Post created successfully";
 
-            
-
             console.log(msgDiv);
             
             
         }
-
         
-
-}
-
-// function for validating the file
-function validateFile(uploadImg){
-    let filePath = uploadImg.value,
-        fileExtension = filePath.split(".").pop(),
-        fileSize = uploadImg.files[0].size,
-        sizeInMb = (fileSize/1048576).toFixed(2);
-
-    // Allowing file type
-    var allowedExtensions = /(\jpg|\jpeg|\png)$/i;
-             
-    if (!allowedExtensions.test(fileExtension)){
-        uploadImg.classList.add("is-invalid");
-        const errorParagraph = uploadImg.nextElementSibling.firstElementChild;
-        errorParagraph.textContent = "File extension must be jpg | jpeg | png | gif";
-
-        filePath = '';
-        return true;
-    }
-    else if(sizeInMb > 2){
-        uploadImg.classList.add("is-invalid");
-        const errorParagraph = uploadImg.nextElementSibling.firstElementChild;
-        errorParagraph.textContent = "File size must not be greater than 2MB";
-
-        filePath = '';
-        return true;
-    }
-    else{
-        uploadImg.classList.remove("is-invalid");
-    }
 }
 
 // function to display post img
@@ -135,7 +106,7 @@ function showPostImg(e){
     postImgDiv = document.querySelector(".post-img-div"),
     postImg = document.querySelector(".post-img");
           
-    if(validateFile(e.target) === true){
+    if(mainfunctions.validateFile(e.target) === true){
         return;
     }
     else{
