@@ -6,43 +6,13 @@ const easyHttp = new mainfunctions.EasyHTTP;
 
 const UIprofileForm  = document.getElementById("profile-form"),
       UIpasswordForm = document.getElementById("password-form"),
-      UIprofileImg = document.getElementById("edit-profile-img"),
-      [...editToggleBtns] = document.querySelectorAll(".edit-toggle-btn");
+      UIprofileImg = document.getElementById("edit-profile-img");
 
 // Adding events
 mainfunctions.checkInputValidity();
-editToggleBtns.forEach(toggleBtn =>{
-    toggleBtn.addEventListener("click", toggleEditForm)
-});
 UIprofileForm.addEventListener("submit", validateProfileForm);
 UIpasswordForm.addEventListener("submit", validatePassForm);
 UIprofileImg.addEventListener("change", editProfileImg);
-
-
-// toggling between profile and password forms
-function divToggler(element){
-    if(element.value === "password"){
-        UIpasswordForm.parentElement.classList.remove("div--deactive");
-        UIprofileForm.parentElement.classList.add("div--deactive");
-    }
-    else{
-        UIpasswordForm.parentElement.classList.add("div--deactive");
-        UIprofileForm.parentElement.classList.remove("div--deactive");
-    }
-}
-function toggleEditForm(e){
-    let toggleBtn = e.target;
-    divToggler(toggleBtn);
-
-    if(toggleBtn.value === "password"){
-        toggleBtn.classList.add("btn--active");
-        editToggleBtns[0].classList.remove("btn--active");
-    }
-    else{
-        toggleBtn.classList.add("btn--active");
-        editToggleBtns[1].classList.remove("btn--active");
-    }
-}
 
 // Profile form validation
 function validateProfileForm(e){
