@@ -9,14 +9,10 @@ const registrationForm = document.getElementById("registration_form");
 
 // Document loading to get the token from localstorage.
 document.addEventListener("DOMContentLoaded", () =>{
-    if(localStorage.getItem("userInfo") !== null){
+    if(localStorage.getItem("userInfo") !== ""){
         let userInfo = JSON.parse(localStorage.getItem("userInfo"));
-        const userRole = userInfo.pop(),
-              agencyfield = document.getElementById("agency");
-
-        if(userRole !== "agency"){
-            agencyfield.parentElement.classList.add("div-deactive");
-        }
+        // const userRole = userInfo.pop(),
+        //       agencyfield = document.getElementById("agency");
     
         let header, data;
 
@@ -25,27 +21,26 @@ document.addEventListener("DOMContentLoaded", () =>{
             password: userInfo[1]
         }
 
-        console.log(data, userRole)
-        // header = {
-        //     "Accept": "application/json",
-        //     'Content-type': 'application/json'
-        // };
-        // // this.submit();
-        // // mainfunctions.redirect(e, location);
-        // easyHttp.post("https://charity-app-production.up.railway.app/api/auth/login", header, data)
-        //     .then(data => {
-        //         let token = data.token;
+        console.log(data)
+        header = {
+            "Accept": "application/json",
+            'Content-type': 'application/json'
+        };
+        easyHttp.post("https://charity-app.up.railway.app/api/auth/login", header, data)
+            .then(data => {
+                let token = data.token;
 
-        //         if(localStorage.getItem("token") !== null){
-        //             localStorage.removeItem("token");
+                if(localStorage.getItem("token") !== ""){
+                    localStorage.removeItem("token");
 
-        //             localStorage.setItem("token", token);
-        //         }
+                    localStorage.setItem("token", token);
+                }
+
+                console.log(token);
 
 
-        //     });
+            });
 
-            // localStorage.removeItem("userInfo");
     }
 });
 ctaBtn.forEach(cta =>{
@@ -65,10 +60,12 @@ function divToggler(e){
         console.log(registration);
     }
     else{
-        location = "dashboard.html";
-
-        this.submit();
-        mainfunctions.redirect(e, location);
+        if(localStorage.getItem("userInfo") !== ""){
+            localStorage.removeItem("userInfo");
+            location = "dashboard.html";
+            mainfunctions.redirect(e, location);
+        }
+        
     }
 }
 
@@ -76,34 +73,27 @@ function divToggler(e){
 function validateForm(e){
     e.preventDefault();
 
-    const agency = document.getElementById("agency"),
-          address = document.getElementById("address"),
+    const address = document.getElementById("address"),
           phone1 = document.getElementById("phone1"),
           phone2 = document.getElementById("phone2"),
-          gender = document.getElementById("gender"),
           phone =   phone1.value.concat(`,${phone2.value}`);
-          if(agency.value === ""
-            || address.value === ""
+
+          if(address.value === ""
             || phone1.value === ""
-            || phone2.value === ""
-            || gender.value === ""){
+            || phone2.value === ""){
             const msg = "All fields are required"
             const paragraph = mainfunctions.displayMessage(msg, "danger");
         
             this.insertBefore(paragraph, this.firstChild);
-            agency.setAttribute("disabled", null);
             address.setAttribute("disabled", null);
             phone1.setAttribute("disabled", null);
             phone2.setAttribute("disabled", null);
-            gender.setAttribute("disabled", null);
 
             setTimeout(() =>{
                 this.removeChild(paragraph);
-                agency.removeAttribute("disabled", null);
                 address.removeAttribute("disabled", null);
                 phone1.removeAttribute("disabled", null);
                 phone2.removeAttribute("disabled", null);
-                gender.removeAttribute("disabled", null);
             }, 2000);
           }
           else{
@@ -114,7 +104,6 @@ function validateForm(e){
                     const data = {
                         address : address.value,
                         phone : phone
-                        // gender : gender.value
                     },
                     url = `https://charity-app.up.railway.app/api/user/${userInfo._id}`,
                     header = {
@@ -126,7 +115,28 @@ function validateForm(e){
 
                     easyHttp.patch(url, header, data)
                     .then(()=>{
-                        mainfunctions.redirect("dashboard.html");
+
+                        const msg = "Registration completed";
+                        const paragraph = mainfunctions.displayMessage(msg, "success"),
+                              registrationBtn = document.querySelector(".registration_btn");
+
+                        registrationBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            Processing..`;
+                        setTimeout(() =>{
+                            registrationBtn.innerHTML = "continue to dashboard";
+                            registrationForm.insertBefore(paragraph, registrationForm.firstChild);
+                            setTimeout(() =>{
+                            address.value = "";
+                            phone1.value = "";
+                            phone2.value = "";
+
+                            registrationForm.removeChild(paragraph);
+                            localStorage.removeItem("userInfo");
+                            mainfunctions.redirect("dashboard.html");
+                            }, 15000);
+                        }, 1000);
+                        
+
                     })
                     .catch(error =>{
                         console.log(error);

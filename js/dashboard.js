@@ -23,13 +23,13 @@ document.addEventListener("DOMContentLoaded", () =>{
     if(localStorage.getItem("token") !== ""){
         const token = localStorage.getItem("token");
 
-        const url = "https://charity-app.up.railway.app/api/posts/allpost";
+        const url = "https://charity-app.up.railway.app/api/posts/all";
 
             easyHttp.get(url)
             .then(data => {
                 let postDetails = data;
 
-                cardArr = postDetails.map(postDetail => {
+                cardArr = postDetails.map((postDetail) => {
                     let contentType = postDetail.content.split("+");
                     contentType = contentType[0];
                     // calling the function to create the UI

@@ -117,7 +117,10 @@ function deleteUser(e){
                       
                 console.log(url);
                 easyHttp.delete(url, header, msg)
-                .then(data => alert(data));
+                .then(data => {
+                    alert(data);
+                    window.location.reload();
+                });
 
             }
         }

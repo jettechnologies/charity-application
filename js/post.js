@@ -19,7 +19,12 @@ document.addEventListener("DOMContentLoaded", () =>{
         const token = localStorage.getItem("token");
         const decodeToken = JSON.parse(atob(token.split('.')[1])),
               userInfo = decodeToken.user,
-              userRole = userInfo.role;
+              postTitle = document.querySelector(".view-post-title"),
+              postImg = document.querySelector(".post-img"),
+              postDescr = document.querySelector(".post-description-text"),
+              userRole = userInfo.role,
+              userID = userInfo._id;
+              console.log(userID);
 
         if(localStorage.getItem("postId") !== ""){
             const postId = localStorage.getItem("postId"),
@@ -28,7 +33,33 @@ document.addEventListener("DOMContentLoaded", () =>{
                             "Authorization" : `Bearer ${token}`
                         }
                 getPostInfo(url, header)
-                .then(data => console.log(data));
+                .then(data => {
+                    let content = data.content.split("+");
+                    content = content[1].trim();
+                    postTitle.textContent = data.header;
+                    postDescr.textContent = content;
+                    const postAuthor = data.author;
+
+                    console.log(postAuthor);
+                    // loading the image from the api request
+                    let imgURL = data.postImage;
+                    fetch(imgURL, {
+                        method: "GET"
+                    })
+                    .then(response => response.blob())
+                    .then(blob => {
+                        const imageURL = URL.createObjectURL(blob); 
+                        postImg.src = imageURL;
+                    }).catch(error => console.log(error));
+
+                    // hidding the update post btn when the user id
+                    // doesnot match the author id
+                    if(userRole !== "donators" || userID === postAuthor){
+                        const ctaBox = document.querySelector(".cta-box"); 
+                        ctaBox.classList.add("div--deactive");   
+                    }
+
+                });
             
                 async function getPostInfo(url, header){
                     try{
@@ -44,17 +75,14 @@ document.addEventListener("DOMContentLoaded", () =>{
                     }
                 }   
 
-                if(userRole !== "donators"){
-                    const ctaBox = document.querySelector(".cta-box"); 
-                    ctaBox.classList.add("div--deactive");   
-                }
+               
             
                 console.log(postId, url);
 
         }
 
         if(userRole !== "agency"){
-            const updatePostBtn = document.querySelector(".update-post-btn");
+            const updatePostBtn = document.querySelector("#update-post-btn");
 
             updatePostBtn.classList.add("div--deactive");
         }
@@ -266,13 +294,21 @@ function updatePost(e){
                                 postType.value = "";
                                 postDescr.value = "";
                                 postImg.value = "";
-    
-                                updatePostForm.insertBefore(msgDiv, updatePostForm.firstChild);
+                                
+                                const updatePostBtn = document.querySelector("#update-post-btn");
+                                updatePostBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Post Updating...`;
+                                
+                                setTimeout(() =>{
+                                    updatePostBtn.innerHTML = "Update Post";
+                                    updatePostForm.insertBefore(msgDiv, updatePostForm.firstChild);
                                     setTimeout(() => {
                                         updatePostForm.removeChild(msgDiv);
                                         mainfunctions.redirect("dashboard.html");
-                                    }, 2000);
-                                    });
+                                    }, 1500);
+                                }, 1000);
+                            });
+
                             console.log("all input are filled");
                         }
                         
@@ -295,14 +331,20 @@ function updatePost(e){
                             console.log(data);
                             const msgDiv = mainfunctions.displayMessage(data, "success");                            
 
-                            updatePostForm.insertBefore(msgDiv, updatePostForm.firstChild);
-                                setTimeout(() => {
-                                    updatePostForm.removeChild(msgDiv);
-                                    mainfunctions.redirect("dashboard.html");
-                                }, 2000);
-                            console.log(msgDiv, data)
+                            const updatePostBtn = document.querySelector("#update-post-btn");
+                                updatePostBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Post Updating...`;
+                                
+                                console.log(updatePostBtn)
+                                setTimeout(() =>{
+                                    updatePostBtn.innerHTML = "Update Post";
+                                    updatePostForm.insertBefore(msgDiv, updatePostForm.firstChild);
+                                    setTimeout(() => {
+                                        updatePostForm.removeChild(msgDiv);
+                                        mainfunctions.redirect("dashboard.html");
+                                    }, 1500);
+                                }, 1000);
                         });
-                        // console.log("all input are empty and the image has been selected");
                     }
                     else{
                         data = {
@@ -342,11 +384,18 @@ function updatePost(e){
                                 postDescr.value = "";
                                 postImg.value = "";
 
-                                updatePostForm.insertBefore(msgDiv, updatePostForm.firstChild);
+                                const updatePostBtn = document.querySelector("#update-post-btn");
+                                updatePostBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Post Updating...`;
+                                
+                                setTimeout(() =>{
+                                    updatePostBtn.innerHTML = "Update Post";
+                                    updatePostForm.insertBefore(msgDiv, updatePostForm.firstChild);
                                     setTimeout(() => {
                                         updatePostForm.removeChild(msgDiv);
                                         mainfunctions.redirect("dashboard.html");
-                                    }, 2000);
+                                    }, 1500);
+                                }, 1000);
                             });
                         });
 

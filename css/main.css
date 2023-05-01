@@ -389,6 +389,7 @@ input[type = number] {
     padding-bottom:var(--padding-600);
 }
 .post-description-text{
+    min-height:20rem;
     font-size:var(--font-size-600);
     word-spacing:2px;
     font-weight:400;

@@ -144,7 +144,6 @@ function signupFormValidator(e){
             email: email.value,
             password: password.value
         };
-        let self = this;
         console.log(data);
 
         // posting the details to the api
@@ -154,63 +153,47 @@ function signupFormValidator(e){
             'Content-type': 'application/json'
         };
 
-        // easyHttp.post("https://charity-app-production.up.railway.app/api/auth/signup", header, data)
-        // .then(data => console.log(data));
-        easyHttp.post("https://charity-app.up.railway.app/api/auth/signup", header, data)
-            .then((data, self) => {
-                // if(localStorage.getItem("userInfo") !== null){
-                //     localStorage.removeItem("userInfo");
-                //     let userInfo;
 
-                //     userInfo = [email.value, password.value, role.value];
-                //     localStorage.setItem("userInfo", JSON.stringify(userInfo));
+        easyHttp.post("https://charity-app.up.railway.app/api/auth/signup", header, data)
+            .then((data) => {
+
+                if(localStorage.getItem("userInfo") !== ""){
+                    localStorage.removeItem("userInfo");
+                    let userInfo;
+        
+                    userInfo = [email.value, password.value];
+                    localStorage.setItem("userInfo", JSON.stringify(userInfo));
                     
-                //     fullName.value = "";
-                //     email.value = "";
-                // }
+                    console.log(userInfo);
+                }
+                
                 const msg = "You have been successfully registered";
                 const paragraph = mainfunctions.displayMessage(msg, "success");
-                self.insertBefore(paragraph, self.firstChild);
+                // adding a spinner class to the signup btn
+                const signupBtn = document.querySelector(".signup_btn");
+                signupBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Registering...`;
+                signupBtn.setAttribute("disabled", null);
                 setTimeout(() =>{
-                    self.removeChild(paragraph);
-                    mainfunctions.redirect("onboarding.html");
-                }, 2000);
+                    signupBtn.innerHTML = "create an account";
+                    signupBtn.removeAttribute("disabled", null);
+
+                    signupForm.insertBefore(paragraph, signupForm.firstChild);
+                    setTimeout(() =>{
+                        fullName.value = "";
+                        email.value = "";
+                        role.value = "";
+    
+                        signupForm.removeChild(paragraph);
+                        mainfunctions.redirect("onboarding.html");
+                    }, 1500);
+                }, 1000);
+                
                 console.log(data);
             })
             .catch((error) =>{
-                const regex = /user$/i,
-                      errorMsg = error.message;
-
-                if(regex.test(errorMsg)){
-                    const paragraph = mainfunctions.displayMessage(errorMsg, "danger");
-                    self.insertBefore(paragraph, self.firstChild);
-                    setTimeout(() =>{
-                        self.removeChild(paragraph);
-                        // mainfunctions.redirect("onboarding.html");
-                    }, 2000);
-                }
                 console.log(error);
             });
-
-        // if(localStorage.getItem("userInfo") !== null){
-        //     localStorage.removeItem("userInfo");
-            
-        //     fullName.value = "";
-        //     email.value = "";
-        // }
-
-        // let userInfo;
-
-        //     userInfo = [email.value, password.value, role.value];
-        //     localStorage.setItem("userInfo", JSON.stringify(userInfo));
-            
-
-        // console.log(userInfo);
-                // mainfunctions.redirect("onboarding.html");
-
-        // 
-
-        // location = "onboarding.html";
     }    
 
 }

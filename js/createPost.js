@@ -62,16 +62,16 @@ function createPost(e) {
                 .then(data => {
                     const msgDiv = mainfunctions.displayMessage(data, "success"),
                           postBtn = document.getElementById("post-btn");
-                    UIcreatePostForm.insertBefore(msgDiv, UIcreatePostForm.firstChild);
                     postBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                     creating post...`;
                     setTimeout(() =>{
+                        postBtn.innerHTML = "Create Post";
+                        UIcreatePostForm.insertBefore(msgDiv, UIcreatePostForm.firstChild);
                         setTimeout(() => {
-                            postBtn.innerHTML = "Create Post";
                             UIcreatePostForm.removeChild(msgDiv);
                             mainfunctions.redirect("dashboard.html");
-                        }, 1000);
-                    }, 2000);
+                        }, 1500);
+                    }, 1000);
                 })
                 .catch(error =>console.log(error));
 

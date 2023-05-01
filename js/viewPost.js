@@ -20,7 +20,7 @@ postFilter.addEventListener("blur", () =>{
 
 // loading all post 
 document.addEventListener("DOMContentLoaded", () =>{
-    const url = " https://charity-app.up.railway.app/api/posts/allpost";
+    const url = " https://charity-app.up.railway.app/api/posts/all";
 
     easyHttp.get(url)
     .then(data =>{
@@ -82,7 +82,7 @@ function deletePost(element){
         postId = postId.textContent;
 
         if(confirm("do you want to delete this post")){
-            if(localStorage.getItem("token") !== null || localStorage.getItem("token") !== ""){
+            if(localStorage.getItem("token") !== ""){
                 const token = localStorage.getItem("token"),
                       url = `https://charity-app.up.railway.app/api/posts/${postId}`,
                       header = {
@@ -93,7 +93,10 @@ function deletePost(element){
                       
                 console.log(url);
                 easyHttp.delete(url, header, msg)
-                .then(data => alert(data));
+                .then(data => {
+                    alert(data);
+                    window.location.reload();
+                });
 
             }
         }
