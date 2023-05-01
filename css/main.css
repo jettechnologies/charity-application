@@ -400,7 +400,8 @@ input[type = number] {
     background-color:var(--bg-color);
     color:var(--text-color-100);
     width:12rem;
-    padding:var(--padding-300) 0;
+    height:4rem;
+    /* padding:var(--padding-300) 0; */
     /* text-transform:uppercase; */
     font-size:var(--font-size-400);
     font-weight:400;

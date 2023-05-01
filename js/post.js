@@ -31,16 +31,24 @@ document.addEventListener("DOMContentLoaded", () =>{
                   url = `https://charity-app.up.railway.app/api/posts/${postId}`,
                   header = {
                             "Authorization" : `Bearer ${token}`
-                        }
+                        };
+
+                if(userRole !== "donators"){
+                    const ctaBox = document.querySelector(".cta-box"); 
+                    ctaBox.classList.add("div--deactive");   
+                }
+
                 getPostInfo(url, header)
                 .then(data => {
-                    let content = data.content.split("+");
-                    content = content[1].trim();
+                    const  content = data.content.split("+"),
+                    contentDescr = content[1].trim();
                     postTitle.textContent = data.header;
-                    postDescr.innerHTML = `${content} <a class="btn btn-link read-more">Read more</a>`;
+                    postDescr.innerHTML = `${contentDescr} <a class="btn btn-link read-more">Read more</a>`;
                     const postAuthor = data.author;
-
+                    console.log(data)
                     console.log(postAuthor);
+
+                    
                     // loading the image from the api request
                     let imgURL = data.postImage;
                     fetch(imgURL, {
@@ -54,11 +62,18 @@ document.addEventListener("DOMContentLoaded", () =>{
 
                     // hidding the update post btn when the user id
                     // doesnot match the author id
-                    if(userID === postAuthor){
-                        const ctaBox = document.querySelector(".cta-box"); 
-                        ctaBox.classList.add("div--deactive");   
+                    if(userID !== postAuthor){
+                        const updatePostBtn = document.querySelector(".update-post-btn"); 
+                        updatePostBtn.classList.add("div--deactive");   
                     }
 
+                    // adding restriction for the handling of the donation btn
+                    const donationBtns = document.querySelectorAll(".donation-btn");
+                    donationBtns.forEach(donationBtn =>{
+                        if(donationBtn.value === content[0]){
+                            donationBtn.removeAttribute("disabled", null);
+                        }
+                    });
                 });
             
                 async function getPostInfo(url, header){
@@ -75,20 +90,15 @@ document.addEventListener("DOMContentLoaded", () =>{
                     }
                 }   
 
-               
-                if(userRole !== "donators"){
-                    const ctaBox = document.querySelector(".cta-box"); 
-                    ctaBox.classList.add("div--deactive");   
-                }
 
                 console.log(postId, url);
 
         }
-
         if(userRole !== "agency"){
-            const updatePostBtn = document.querySelector("#update-post-btn");
+            const updatePostBtn = document.querySelector(".update-post-btn");
 
             updatePostBtn.classList.add("div--deactive");
+            console.log(updatePostBtn);
         }
     }
 });
@@ -409,9 +419,6 @@ function updatePost(e){
             }
         }
 
-         // console.log(inputValid);
-            console.log("i got submitted");
-            $('#money-donation').modal("hide");
     }
    
 
@@ -481,7 +488,6 @@ function moneyDonation(e){
                 .catch(error => console.log(error));
             }
 
-            console.log(data);
         }
         $('#money-donation').modal("hide");
     
@@ -507,36 +513,7 @@ function showHiddenField(e){
         transferField.classList.remove("hidden-field");
     }
 }
-// // function for validating the file
-// function validateFile(e){
-//     let filePath = e.target.value,
-//         fileExtension = filePath.split(".").pop(),
-//         fileSize = e.target.files[0].size,
-//         sizeInMb = (fileSize/1048576).toFixed(2);
 
-//     // Allowing file type
-//     var allowedExtensions = /(\jpg|\jpeg|\png)$/i;
-             
-//     if (!allowedExtensions.test(fileExtension)){
-//         e.target.classList.add("is-invalid");
-//         const errorParagraph = document.querySelector(".error");
-//         errorParagraph.textContent = "File extension must be jpg | jpeg | png | gif";
-
-//         console.log(errorParagraph);
-//         filePath = '';
-//     }
-//     else if(sizeInMb > 2){
-//         e.target.classList.add("is-invalid");
-//         const errorParagraph = document.querySelector(".error");
-//         errorParagraph.textContent = "File size must not be greater than 2MB";
-
-//         filePath = '';
-//     }
-//     else{
-//         e.target.classList.remove("is-invalid");
-//     }
-//     // console.log(sizeInMb, fileName);
-// }
 // update account number
 function updateAccNumber(e){
     const bankNumberField = document.getElementById("bank-number");
@@ -615,15 +592,21 @@ function bloodDonation(e){
                     // making the post request for blood donation
                     easyHttp.post(url, header, data)
                     .then(data => {
-                        console.log(data)
-                        $('#blood-donation').modal("hide");
-                        bloodGenotype.value = "";
-                        bloodGroup.value = "";
-                        bloodPile.value = "";
-                        radioBtns.forEach(radioBtn =>{
-                            radioBtn.checked = false
-                        });
-                        showCongratMsg();
+                        const donationBtn = document.getElementById("blood-donation-btn");
+                        donationBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        donating...`;
+                        setTimeout(() =>{
+                            donationBtn.innerHTML = "make donation"
+                            $('#blood-donation').modal("hide");
+                            bloodGenotype.value = "";
+                            bloodGroup.value = "";
+                            bloodPile.value = "";
+                            radioBtns.forEach(radioBtn =>{
+                                radioBtn.checked = false
+                            });
+                            showCongratMsg();
+                        }, 1500);
+                        
                     })
                     .catch(error => console.log(error));
 
@@ -649,7 +632,6 @@ function materialDonation(e){
     const materialType = document.getElementById("material-type"),
           materialName = document.getElementById("material-name"),
           materialQuantity = document.getElementById("material-quantity"),
-          materialImg = document.getElementById("material-img"),
           regex = /^[a-zA-Z][a-zA-Z ]+[a-zA-Z]{3,10}$/i,
           inputArr = [materialName, materialQuantity, materialType],
           description = `Type of material : ${materialType.value} + 
@@ -659,7 +641,6 @@ function materialDonation(e){
     // validating empty input field
     mainfunctions.fieldInputValidation(inputArr, this);
 
-    if(materialImg.value !== ""){
         if(!regex.test(materialName.value)){    
             materialName.classList.add("is-invalid");
         }
@@ -675,7 +656,7 @@ function materialDonation(e){
                     // making an api call for the donation of relief materials
                     data = {
                         description: description,
-                        image : `${materialImg.files[0].name}`
+                        image : "working"
                     };
                     header = {
                         "Accept": "application/json",
@@ -686,63 +667,22 @@ function materialDonation(e){
 
                     easyHttp.post(url, header, data)
                     .then(data =>{
-                        console.log(data);
-                        const materialID  = data._id;
-                        console.log(materialID);
-
-                        // making a patch for the material image upload
-                        formData = new FormData();
-                        formData.append("file", materialImg.files[0]);
-
-                        const imgData = {
-                            formData : formData,
-                            msg : "Picture of the material uploaded succesfully"
-                        }
-                        header = {
-                            'Authorization': `Bearer ${token}`,
-                        };
-                        url = `https://charity-app.up.railway.app/api/money/upload/${materialID}`;
-
-                        easyHttp.imgUpload(url, header, imgData)
-                        .then(data => {
-                            console.log(data);
-
-                            materialName.value = "";
-                            materialQuantity.value = "";
-                            materialType.value = "";
+                        const donationBtn = document.getElementById("material-donation-btn");
+                        donationBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        donating...`;
+                        
+                        setTimeout(() =>{
+                            donationBtn.innerHTML = "make donation";
                             $('#material-donation').modal("hide");
+    
                             showCongratMsg();
-                        });
+                        }, 1500);
                     })
                     .catch(error => console.log(error));
         
                 }
             }
             
-        }
-    }
-    else{
-        let msg = "Please select an image of the material donation";
-            const error = mainfunctions.displayMessage(msg, "danger");
-            this.insertBefore(error, this.firstChild);
-            setTimeout(() => {
-                this.removeChild(error);
-            }, 2000);
-    }
-    
+        }  
 
 }
-
-// empty field validation
-
-// validating the input of the material name input
-// function inputValid(e){
-//     const regex = /^[a-zA-Z\s]{2,32}55$/i;
-
-//     if(!regex.test(e.target.value)){
-//         e.target.classList.add("is-invalid");
-//     }
-//     else{
-//         e.target.classList.remove("is-invalid");
-//     }
-// }

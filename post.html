@@ -74,9 +74,9 @@
                                     make donations
                                 </h4>
                                 <div class="d-flex justify-content-between">
-                                    <button class="btn btn-success text-white btn-lg donation-btn py-lg-3" data-toggle="modal" data-target="#money-donation"><i class="fa-solid fa-money-bill"></i>money</button>
-                                    <button class="btn btn-success text-white btn-lg donation-btn py-lg-3" data-toggle="modal" data-target="#blood-donation"><i class="fa-solid fa-droplet"></i>blood</button>
-                                    <button class="btn btn-success text-white btn-lg donation-btn py-lg-3" data-toggle="modal" data-target="#material-donation"><i class="fa-solid fa-tshirt"></i>material</button>
+                                    <button class="btn btn-success text-white btn-lg donation-btn py-lg-3" disabled data-toggle="modal" data-target="#money-donation" value = "money"><i class="fa-solid fa-money-bill"></i>money</button>
+                                    <button class="btn btn-success text-white btn-lg donation-btn py-lg-3" disabled data-toggle="modal" data-target="#blood-donation" value = "blood"><i class="fa-solid fa-droplet"></i>blood</button>
+                                    <button class="btn btn-success text-white btn-lg donation-btn py-lg-3" disabled data-toggle="modal" data-target="#material-donation" value = "material"><i class="fa-solid fa-tshirt"></i>material</button>
                                 </div>
                             </div>
                             <div class="comment-div col-lg-11 coml-md-11 mt-lg-4">
@@ -258,7 +258,7 @@
                               </div>
                               <div class="modal-footer">
                                 <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-success send-donation-btn">make donation</button>
+                                <button type="submit" class="btn btn-success send-donation-btn" id = "blood-donation-btn">make donation</button>
                               </div>
                           </form>
                         </div>
@@ -296,17 +296,10 @@
                             <div class="form-group">
                               <label for="material-quantity" class="form-label">Quantity of material</label>
                               <input type="text" class="form-control" id = "material-quantity" placeholder="Quantity of material">
-                          </div>
-                          <div class="form-group">
-                            <label class = "form-label" for="material-img">Picture of the mateial donation</label>
-                            <input type="file" class = "form-control" id="material-img" >
-                            <div class="invalid-feedback pt-lg-2 ">
-                              <p class="error font-weight-bold"></p>
-                            </div>
                           </div>  
                           <div class="modal-footer">
                             <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success donation-btn">Make donation</button>
+                            <button type="submit" class="btn btn-success donation-btn" id = "material-donation-btn">Make donation</button>
                           </div>
                           </form>
                         </div>

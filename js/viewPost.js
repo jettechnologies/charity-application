@@ -67,7 +67,7 @@ function createTableUI(post, index){
 // delete post function
 function postAction(e){
     if(e.target.id === "view-post-btn"){
-        viewPost();
+        mainfunctions.redirect("post.html");
     }
     else if(e.target.id === "delete-post-btn"){
         deletePost(e.target);
