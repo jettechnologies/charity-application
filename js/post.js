@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () =>{
 
                 getPostInfo(url, header)
                 .then(data => {
+                    console.log(data);
                     const  content = data.content.split("+"),
                     contentDescr = content[1].trim();
                     postTitle.textContent = data.header;
@@ -238,18 +239,21 @@ function editComment(element){
         commentList = element.parentElement;
     const [...commentListArr] = UIcommentUL.children;
 
-    element.parentElement.classList.add("editted");
-    commentField.value = paragraph.textContent;
-    paragraph.textContent = commentField.value;
-
     // Ensuring that multiple comment cannot be editted at once
     const ecl = commentListArr.filter(commentList =>{
         let editComment = commentList.classList.contains("editted");
         return editComment;
     });
+    // console.log(ecl[1]);
     if(ecl.length > 1){
         alert("Only one comment can be editted at a time");
+        element.parentElement.classList.remove("editted");
         return;
+    }
+    else{
+        element.parentElement.classList.add("editted");
+        commentField.value = paragraph.textContent;
+        paragraph.textContent = commentField.value;
     }
 }
 

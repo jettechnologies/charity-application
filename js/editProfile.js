@@ -5,15 +5,26 @@ import * as mainfunctions from "./utils.js";
 const easyHttp = new mainfunctions.EasyHTTP;
 
 const UIprofileForm  = document.getElementById("profile-form"),
-      UIpasswordForm = document.getElementById("password-form"),
       UIprofileImg = document.getElementById("edit-profile-img");
 
 // Adding events
 mainfunctions.checkInputValidity();
 UIprofileForm.addEventListener("submit", validateProfileForm);
-UIpasswordForm.addEventListener("submit", validatePassForm);
 UIprofileImg.addEventListener("change", editProfileImg);
 
+
+// Document loading to get the image of the user and spit it out
+document.addEventListener("DOMContentLoaded", () =>{
+    if(localStorage.getItem("token") !== ""){
+        const token = localStorage.getItem("token");
+        // decoding the information that is been stored in the token
+        const decodeToken = JSON.parse(atob(token.split('.')[1])),
+              userInfo = decodeToken.user,
+              userID = userInfo._id;
+        
+        console.log(userID);
+    }
+});
 // Profile form validation
 function validateProfileForm(e){
     e.preventDefault();
@@ -192,6 +203,8 @@ function editProfileImg(e){
         fileReader.readAsDataURL(imgSrc);
         fileReader.onload = function (){
         profileImg.setAttribute('src', fileReader.result);
+
+        console.log(profileImg);
         }
     }
 }

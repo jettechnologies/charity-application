@@ -21,12 +21,12 @@ document.addEventListener("DOMContentLoaded", () =>{
     easyHttp.get(url)
     .then(data =>{
         rowArr = data.map((user, index) => {
+            console.log(user);
             let indexNo = index + 1;
 
                 const tableRow = createTableUI(user, indexNo);
                 return {fullname: user.fullname, email: user.email, element: tableRow};
             // createTableUI(user, indexNo);
-            // console.log(tableBody.children);
         });
 
     });
