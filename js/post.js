@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () =>{
                     let content = data.content.split("+");
                     content = content[1].trim();
                     postTitle.textContent = data.header;
-                    postDescr.textContent = content;
+                    postDescr.innerHTML = `${content} <a class="btn btn-link read-more">Read more</a>`;
                     const postAuthor = data.author;
 
                     console.log(postAuthor);
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () =>{
 
                     // hidding the update post btn when the user id
                     // doesnot match the author id
-                    if(userRole !== "donators" || userID === postAuthor){
+                    if(userID === postAuthor){
                         const ctaBox = document.querySelector(".cta-box"); 
                         ctaBox.classList.add("div--deactive");   
                     }
@@ -76,7 +76,11 @@ document.addEventListener("DOMContentLoaded", () =>{
                 }   
 
                
-            
+                if(userRole !== "donators"){
+                    const ctaBox = document.querySelector(".cta-box"); 
+                    ctaBox.classList.add("div--deactive");   
+                }
+
                 console.log(postId, url);
 
         }
