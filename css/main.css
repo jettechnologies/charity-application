@@ -328,7 +328,6 @@ input[type = number] {
 }
 .card-img{
     max-height:20rem;
-
     object-fit:cover;
 }
 .post-card .post-img{

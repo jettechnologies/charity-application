@@ -133,7 +133,7 @@ function validateForm(e){
                             registrationForm.removeChild(paragraph);
                             localStorage.removeItem("userInfo");
                             mainfunctions.redirect("dashboard.html");
-                            }, 15000);
+                            }, 1500);
                         }, 1000);
                         
 
